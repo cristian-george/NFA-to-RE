@@ -1,0 +1,29 @@
+﻿#include <iostream>
+#include <fstream>
+#include "GeneralizedTransitionGraph.h"
+
+int main()
+{
+	std::ifstream fin("nfa_elements.txt");
+	TransitionGraph transitionGraph;
+
+	fin >> transitionGraph;
+	std::cout << transitionGraph << std::endl;
+
+	transitionGraph.AddNewInitialState();
+	std::cout << "Transition graph after adding a new start state: " << std::endl;
+	std::cout << transitionGraph << std::endl;
+
+	transitionGraph.AddNewFinalState();
+	std::cout << "Transition graph after adding a new final state: " << std::endl;
+	std::cout << transitionGraph << std::endl;
+
+	transitionGraph.ReconstructTransitionGraph();
+	std::cout << "Transition graph after reconstructing the transition graph: " << std::endl;
+	std::cout << transitionGraph << std::endl;
+
+	transitionGraph.StateElimination();
+	std::cout << std::endl;
+	std::cout << "The regular expression: " << transitionGraph.GetRegularExpression() << std::endl;
+	return 0;
+}

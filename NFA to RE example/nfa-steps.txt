@@ -1,0 +1,142 @@
+INPUT:
+Number of states
+Enumerate the states
+Number of transitions
+Enumerate transitions (state symbol state)
+Initial state
+Number of final states
+Enumerate final states
+
+4
+q0 q1 q2 q3 
+8
+q0 a q1
+q0 b q3
+q1 a q2
+q1 b q3
+q2 a q2
+q2 b q1
+q3 a q3
+q3 b q3
+q0
+2
+q1 q2
+
+1. Add new initial state
+	- q0 is no longer an initial state
+	- S is initial state
+	- add d(S, ε) = q0
+2. Add new final state
+	- q1 and q2 are no longer final states
+	- F is final state
+	- add d(q1, ε) = F and d(q2, ε) = F
+3. Construct transition graph
+	If there are k transitions like d(x, symbol_i) = y, i=1,k then:
+	- add a new transition d(x, symbol_1 + symbol_2 + ... + symbol_k) = y
+	- delete the old k ones
+	In our case:
+	- add transition d(q3, a+b) = q3
+	- delete transitions d(q3, a) and d(q3, b)
+4. Remove states
+- Choose q0
+	- The states that goes into q0: S
+	- The states that can be reached from q0: q1, q3
+
+	Take pair S-q1
+	- d(S, ε) = q0
+	- q0 doesn't have a loop on itself
+	- d(q0, a) = q1
+
+	- add d(S, q1) = ε.a = a
+
+	Take pair S-q3
+	- d(S, ε) = q0
+	- q0 doesn't have a loop on itself
+	- d(q0, b) = q3
+
+	- add d(S, q3) = ε.b = b
+
+	Now remove q0 and construct transition graph
+
+- Choose q1
+	- The states that goes into q1: S, q2
+	- The states that can be reached from q1: q2, q3, F
+
+	Take pair S-q2
+	- d(S, a) = q1
+	- q1 doesn't have a loop on itself
+	- d(q1, a) = q2
+
+	- add d(S, q2) = a.a = aa
+
+
+	Take pair S-q3
+	- d(S, a) = q3
+	- q1 doesn't have a loop on itself
+	- d(q1, b) = q3
+
+	- add d(S, q3) = a.b = ab
+
+	Take pair S-F
+	- d(S, a) = q1
+	- q1 doesn't have a loop on itself
+	- d(q1, ε) = F
+
+	- add d(S, F) = a.ε = a
+
+
+	Take pair q2-q2
+	- d(q2, b) = q1
+	- q1 doesn't have a loop on itself
+	- d(q1, a) = q2
+
+	- add d(q2, q2) = b.a = ba
+
+	Take pair q2-q3
+	- d(q2, b) = q1
+	- q1 doesn't have a loop on itself
+	- d(q1, b) = q3
+
+	- add d(q2, q3) = b.b = bb
+
+	Take pair q2-F
+	- d(q2, b) = q1
+	- q1 doesn't have a loop on itself
+	- d(q1, ε) = F
+
+	- add d(q2, F) = b.ε = b
+	Now remove q1 and construct transition graph
+
+- Choose q2
+	- The states that goes into q2: S
+	- The states that can be reached from q2: q3, F
+
+	Take pair S-q3
+	- d(S, aa) = q2
+	- q2 has a loop on itself d(q2, ba+a) = q2
+	- d(q2, bb) q3
+
+	- add d(S, q3) = aa(ba+a)*bb
+
+	Take pair S-F
+	- d(S, aa) = q2
+	- q2 has a loop on itself d(q2, ba+a) = q2
+	- d(q2, ε+b) = F
+
+	- add d(S, F) = aa(ba+a)*(ε+b)
+
+	Now remove q2 and construct transition graph
+
+- Choose q3
+	- The states that goes into q3: S
+	- The states that can be reached from q3: -
+
+	Remove q3, it's a dead state
+
+STOP! S and F are the only states available
+
+OUTPUT:
+5. Extract the regular expression
+d(S, aa(ba+a)*(ε+b)+a) = F => RE = aa(ba+a)*(ε+b)+a
+
+My program returns (a+aa((a+ba))*($+b)), where $ is the empty string ε.
