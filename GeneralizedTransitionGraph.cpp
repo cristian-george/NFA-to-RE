@@ -72,6 +72,29 @@ std::ostream& operator<<(std::ostream& out, const TransitionGraph& nfa)
 	return out;
 }
 
+bool TransitionGraph::Verify()
+{
+	if (m_states.find(m_initialState) == m_states.end())
+		return false;
+
+	for (const auto& finalState : m_finalStates)
+		if (m_states.find(finalState) == m_states.end())
+			return false;
+
+	for (const auto& [states, symbols] : m_transitionTable)
+	{
+		if (m_states.find(states.first) == m_states.end() or
+			m_states.find(states.second) == m_states.end())
+			return false;
+
+		for (const auto& symbol : symbols)
+			if (symbol.length() > 1)
+				return false;
+	}
+
+	return true;
+}
+
 void TransitionGraph::Clear()
 {
 	m_states.clear();

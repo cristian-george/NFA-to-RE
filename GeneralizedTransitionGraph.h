@@ -27,6 +27,7 @@ public:
 	friend std::istream& operator>>(std::istream&, TransitionGraph&);
 	friend std::ostream& operator<<(std::ostream&, const TransitionGraph&);
 
+	bool Verify();
 	void Clear();
 
 public:

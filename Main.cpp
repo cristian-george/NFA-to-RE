@@ -8,6 +8,12 @@ int main()
 	TransitionGraph transitionGraph;
 
 	fin >> transitionGraph;
+	if (!transitionGraph.Verify())
+	{
+		std::cout << "The NFA is not valid. \n";
+		return 0;
+	}
+
 	std::cout << transitionGraph << std::endl;
 
 	transitionGraph.AddNewInitialState();
