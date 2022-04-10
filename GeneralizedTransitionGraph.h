@@ -53,7 +53,7 @@ public:
 private:
 	std::unordered_set<State> StatesThatGoesInto(const State&);
 	std::unordered_set<State> StatesThatCanBeReachedFrom(const State&);
-	bool HasLoop(const State&);
+	bool HasSelfLoop(const State&);
 
 private:
 	const std::string EMPTY_STRING = "$";

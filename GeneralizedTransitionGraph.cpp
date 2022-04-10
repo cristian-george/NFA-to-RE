@@ -178,14 +178,12 @@ void TransitionGraph::StateElimination()
 	while (m_states.size() > 2)
 	{
 		State stateToRemove = "q" + std::to_string(counter);
-		bool hasLoop = HasLoop(stateToRemove);
+		bool hasSelfLoop = HasSelfLoop(stateToRemove);
 
-		std::unordered_set<State> inSet =
-			StatesThatGoesInto(stateToRemove);
+		std::unordered_set<State> inSet = StatesThatGoesInto(stateToRemove);
+		std::unordered_set<State> outSet = StatesThatCanBeReachedFrom(stateToRemove);
 
-		std::unordered_set<State> outSet =
-			StatesThatCanBeReachedFrom(stateToRemove);
-
+		std::cout << "---------- Removing state " << stateToRemove << " ---------- \n";
 		if (!inSet.empty() && !outSet.empty())
 		{
 			std::cout << "States that goes into " << stateToRemove << ": ";
@@ -198,13 +196,13 @@ void TransitionGraph::StateElimination()
 			{
 				for (const auto& secondState : outSet)
 				{
-					Label firstLabel = m_transitionTable[std::make_pair(firstState, stateToRemove)][0];
-					Label lastLabel = m_transitionTable[std::make_pair(stateToRemove, secondState)][0];
+					Label firstLabel = *m_transitionTable[std::make_pair(firstState, stateToRemove)].begin();
+					Label lastLabel = *m_transitionTable[std::make_pair(stateToRemove, secondState)].begin();
 
 					Label newLabel = Helper::Concatenation<Label>(EMPTY_STRING, firstLabel);
-					if (hasLoop)
+					if (hasSelfLoop)
 					{
-						Label intermediateLabel = Helper::KleeneStar<Label>(m_transitionTable[std::make_pair(stateToRemove, stateToRemove)][0]);
+						Label intermediateLabel = Helper::KleeneStar<Label>(*m_transitionTable[std::make_pair(stateToRemove, stateToRemove)].begin());
 						newLabel = Helper::Concatenation<Label>(newLabel, intermediateLabel);
 					}
 					newLabel = Helper::Concatenation<Label>(newLabel, lastLabel);
@@ -215,11 +213,13 @@ void TransitionGraph::StateElimination()
 		}
 		else
 		{
-			std::cout << stateToRemove << " it's a dead state \n";
+			std::cout << "The state " << stateToRemove << " it's a dead state \n";
 		}
 
 		RemoveState(stateToRemove);
 		ReconstructTransitionGraph();
+
+		std::cout << *this;
 		++counter;
 	}
 }
@@ -257,7 +257,7 @@ std::unordered_set<State> TransitionGraph::StatesThatCanBeReachedFrom(const Stat
 	return statesThatCanBeReachedFrom;
 }
 
-bool TransitionGraph::HasLoop(const State& refState)
+bool TransitionGraph::HasSelfLoop(const State& refState)
 {
 	return m_transitionTable.find(std::make_pair(refState, refState)) != m_transitionTable.end();
 }

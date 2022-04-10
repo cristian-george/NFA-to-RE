@@ -19,11 +19,10 @@ int main()
 	std::cout << transitionGraph << std::endl;
 
 	transitionGraph.ReconstructTransitionGraph();
-	std::cout << "Transition graph after reconstructing the transition graph: " << std::endl;
+	std::cout << "Transition graph after reconstruction: " << std::endl;
 	std::cout << transitionGraph << std::endl;
 
 	transitionGraph.StateElimination();
-	std::cout << std::endl;
 	std::cout << "The regular expression: " << transitionGraph.GetRegularExpression() << std::endl;
 	return 0;
 }
