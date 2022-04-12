@@ -140,12 +140,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="GeneralizedTransitionGraph.cpp" />
+    <ClCompile Include="NFA.cpp" />
+    <ClCompile Include="TransitionGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneralizedTransitionGraph.h" />
+    <ClInclude Include="Conversion.h" />
+    <ClInclude Include="NFA.h" />
+    <ClInclude Include="TransitionGraph.h" />
     <ClInclude Include="Helper.h" />
   </ItemGroup>
   <ItemGroup>

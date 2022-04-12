@@ -2,11 +2,13 @@
 #include <iostream>
 #include <unordered_set>
 
+const std::string EMPTY_STRING = "$";
+
 class Helper
 {
 public:
 	template<class T>
-	static void PrintSet(std::unordered_set<T>);
+	static void PrintSet(const std::unordered_set<T>&);
 
 	template<class T>
 	static T Union(const std::vector<T>&);
@@ -19,7 +21,7 @@ public:
 };
 
 template<class T>
-inline void Helper::PrintSet(std::unordered_set<T> set)
+inline void Helper::PrintSet(const std::unordered_set<T>& set)
 {
 	for (const auto& element : set)
 		std::cout << element << ", ";
@@ -31,6 +33,7 @@ template<class T>
 inline T Helper::Union(const std::vector<T>& labels)
 {
 	T unionLabel;
+
 	unionLabel.push_back('(');
 	for (const auto& label : labels)
 	{
@@ -46,10 +49,9 @@ inline T Helper::Union(const std::vector<T>& labels)
 template<class T>
 inline T Helper::Concatenation(const T& label1, const T& label2)
 {
-	T EMPTY_STRING = "$";
 	if (label1 == EMPTY_STRING && label2 == EMPTY_STRING)
 	{
-		return "";
+		return EMPTY_STRING;
 	}
 	if (label1 == EMPTY_STRING)
 	{
@@ -66,5 +68,8 @@ inline T Helper::Concatenation(const T& label1, const T& label2)
 template<class T>
 inline T Helper::KleeneStar(const T& label)
 {
+	if (label.length() == 1)
+		return T(label + "*");
+
 	return T("(" + label + ")*");
 }
